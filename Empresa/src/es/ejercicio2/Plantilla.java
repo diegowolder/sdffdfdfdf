@@ -6,7 +6,6 @@ package es.ejercicio2;
 public final class Plantilla {
 
     private Plantilla() { /* no instanciable */ }
-        double sueldo;
     public static double totalizarSueldos(Empleado[] empleados) {
         double total = 0.0;
         if (empleados == null) return total;
@@ -22,4 +21,5 @@ public final class Plantilla {
         double descuento = (empleado instanceof Jefe) ? 0.05 : 0.10;
         empleado.setSueldo(empleado.getSueldo() * (1.0 - descuento));
     }
+
 }
