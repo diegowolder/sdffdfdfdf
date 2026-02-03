@@ -14,6 +14,7 @@ public final class Plantilla {
             if (e != null) total += e.getSueldo();
         }
         return total;
+       
     }
 
     public static void descontarPorcentaje(Empleado empleado) {
