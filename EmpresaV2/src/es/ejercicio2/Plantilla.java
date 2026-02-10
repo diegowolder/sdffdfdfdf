@@ -1,5 +1,8 @@
 package es.ejercicio2;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Clase utilitaria Plantilla con métodos estáticos.
  * Proporciona operaciones comunes sobre conjuntos de empleados,
@@ -7,7 +10,7 @@ package es.ejercicio2;
  * Esta clase no puede ser instanciada.
  * 
  * @author diegowolder
- * @version 1.0
+ * @version 2.0
  */
 public final class Plantilla {
 
@@ -16,11 +19,67 @@ public final class Plantilla {
     
     /** Porcentaje de descuento para empleados normales (10%) */
     private static final double DESCUENTO_EMPLEADO = 0.10;
+    
+    /** HashMap para almacenar empleados por número de empleado */
+    private static final Map<Integer, Empleado> empleadosPorNumero = new HashMap<>();
+    
+    /** Map para controlar el número de descuentos aplicados por empleado */
+    private static final Map<Integer, Integer> descuentosPorEmpleado = new HashMap<>();
 
     /**
      * Constructor privado para evitar instanciación de esta clase utilitaria.
      */
     private Plantilla() { /* No instanciable */ }
+    
+    /**
+     * Registra un empleado en el HashMap por su número de empleado.
+     * 
+     * @param empleado Empleado a registrar (no puede ser null)
+     * @return true si se registró correctamente, false si el empleado es null
+     */
+    public static boolean registrarEmpleado(Empleado empleado) {
+        if (empleado == null) return false;
+        empleadosPorNumero.put(empleado.getNumEmpleado(), empleado);
+        return true;
+    }
+    
+    /**
+     * Obtiene un empleado por su número de empleado.
+     * 
+     * @param numEmpleado Número del empleado a buscar
+     * @return Empleado correspondiente al número, o null si no existe
+     */
+    public static Empleado obtenerEmpleado(int numEmpleado) {
+        return empleadosPorNumero.get(numEmpleado);
+    }
+    
+    /**
+     * Elimina un empleado del HashMap por su número de empleado.
+     * 
+     * @param numEmpleado Número del empleado a eliminar
+     * @return Empleado eliminado, o null si no existía
+     */
+    public static Empleado eliminarEmpleado(int numEmpleado) {
+        descuentosPorEmpleado.remove(numEmpleado);
+        return empleadosPorNumero.remove(numEmpleado);
+    }
+    
+    /**
+     * Obtiene el número total de empleados registrados.
+     * 
+     * @return Número de empleados en el HashMap
+     */
+    public static int obtenerNumeroEmpleados() {
+        return empleadosPorNumero.size();
+    }
+    
+    /**
+     * Limpia todos los empleados registrados.
+     */
+    public static void limpiarEmpleados() {
+        empleadosPorNumero.clear();
+        descuentosPorEmpleado.clear();
+    }
 
     /**
      * Calcula la suma total de todos los sueldos de los empleados.
@@ -38,22 +97,48 @@ public final class Plantilla {
     }
     
     /**
-     * Método comentado para futuro control de descuentos por empleado.
-     * Podría implementarse para controlar las veces que un empleado 
-     * ha tenido descuentos aplicados a su sueldo.
+     * Calcula la suma total de todos los sueldos de los empleados registrados en el HashMap.
+     * 
+     * @return Total de sueldos brutos de todos los empleados registrados
+     */
+    public static double totalizarSueldos() {
+        double total = 0.0;
+        for (Empleado e : empleadosPorNumero.values()) {
+            if (e != null) total += e.getSueldo();
+        }
+        return total;
+    }
+    
+    /**
+     * Verifica si un empleado aún no ha recibido descuentos.
+     * Este método solo consulta el estado, no impide aplicar descuentos.
+     * El método descontarPorcentaje() puede aplicar múltiples descuentos sin verificar esta condición.
      * 
      * @param empleado Empleado a verificar
-     * @return true si se puede aplicar descuento, false en caso contrario
+     * @return true si no se ha aplicado ningún descuento aún, false en caso contrario
      */
-    /*
     public static boolean controlDescontarPorcentaje(Empleado empleado) {
-       return true; 
+        if (empleado == null) return false;
+        Integer numDescuentos = descuentosPorEmpleado.get(empleado.getNumEmpleado());
+        return numDescuentos == null || numDescuentos == 0;
     }
-    */
+    
+    /**
+     * Obtiene el número de descuentos aplicados a un empleado.
+     * 
+     * @param empleado Empleado a consultar
+     * @return Número de descuentos aplicados, o 0 si no se ha aplicado ninguno
+     */
+    public static int obtenerNumeroDescuentos(Empleado empleado) {
+        if (empleado == null) return 0;
+        Integer numDescuentos = descuentosPorEmpleado.get(empleado.getNumEmpleado());
+        return numDescuentos == null ? 0 : numDescuentos;
+    }
     
     /**
      * Aplica un descuento porcentual al sueldo del empleado según su tipo.
      * Los Jefes tienen un descuento del 5%, los Empleados normales del 10%.
+     * Registra el descuento aplicado en el Map de control.
      * 
      * @param empleado Empleado al que se le aplicará el descuento (puede ser null)
      */
@@ -70,6 +155,11 @@ public final class Plantilla {
         }
         
         empleado.setSueldo(empleado.getSueldo() * (1.0 - descuento));
+        
+        // Registrar el descuento aplicado
+        int numEmpleado = empleado.getNumEmpleado();
+        Integer numDescuentos = descuentosPorEmpleado.get(numEmpleado);
+        descuentosPorEmpleado.put(numEmpleado, numDescuentos == null ? 1 : numDescuentos + 1);
     }
 }
 
