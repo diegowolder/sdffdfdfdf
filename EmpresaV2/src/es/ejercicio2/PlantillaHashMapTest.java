@@ -29,10 +29,19 @@ public class PlantillaHashMapTest {
         System.out.println("--- 1. REGISTRO DE EMPLEADOS EN HASHMAP ---");
         System.out.println("Empleados antes de registrar: " + Plantilla.obtenerNumeroEmpleados());
         
-        Plantilla.registrarEmpleado(emp1);
-        Plantilla.registrarEmpleado(emp2);
-        Plantilla.registrarEmpleado(emp3);
-        Plantilla.registrarEmpleado(emp4);
+        boolean registered1 = Plantilla.registrarEmpleado(emp1);
+        boolean registered2 = Plantilla.registrarEmpleado(emp2);
+        boolean registered3 = Plantilla.registrarEmpleado(emp3);
+        boolean registered4 = Plantilla.registrarEmpleado(emp4);
+        
+        System.out.println("Registro exitoso de emp1: " + registered1);
+        System.out.println("Registro exitoso de emp2: " + registered2);
+        System.out.println("Registro exitoso de emp3: " + registered3);
+        System.out.println("Registro exitoso de emp4: " + registered4);
+        
+        // Probar registro de empleado null
+        boolean registeredNull = Plantilla.registrarEmpleado(null);
+        System.out.println("Registro de null (debe ser false): " + registeredNull);
         
         System.out.println("Empleados registrados: " + Plantilla.obtenerNumeroEmpleados());
         System.out.println("Empleado 1 - Número: " + emp1.getNumEmpleado() + ", Nombre: " + emp1.getNombre());
@@ -65,8 +74,10 @@ public class PlantillaHashMapTest {
         System.out.println("Sueldo después: " + emp1.getSueldo());
         System.out.println("Descuentos aplicados: " + Plantilla.obtenerNumeroDescuentos(emp1));
         System.out.println("¿Se puede aplicar descuento nuevamente? " + Plantilla.controlDescontarPorcentaje(emp1));
+        System.out.println("Nota: controlDescontarPorcentaje() retorna false después del primer descuento,");
+        System.out.println("      pero descontarPorcentaje() no verifica esto y permite múltiples descuentos.");
         
-        System.out.println("\nAplicando segundo descuento a " + emp1.getNombre() + "...");
+        System.out.println("\nAplicando segundo descuento a " + emp1.getNombre() + " (sin control)...");
         Plantilla.descontarPorcentaje(emp1);
         System.out.println("Sueldo después del segundo descuento: " + emp1.getSueldo());
         System.out.println("Descuentos aplicados: " + Plantilla.obtenerNumeroDescuentos(emp1));
@@ -87,6 +98,10 @@ public class PlantillaHashMapTest {
         Empleado eliminado = Plantilla.eliminarEmpleado(emp3.getNumEmpleado());
         System.out.println("Empleado eliminado: " + (eliminado != null ? eliminado.getNombre() : "null"));
         System.out.println("Empleados después de eliminar: " + Plantilla.obtenerNumeroEmpleados());
+        
+        // Verificar que el empleado ya no existe
+        Empleado buscado = Plantilla.obtenerEmpleado(emp3.getNumEmpleado());
+        System.out.println("Búsqueda del empleado eliminado (debe ser null): " + buscado);
         
         System.out.println("\n--- 7. TOTAL DE SUELDOS DESPUÉS DE CAMBIOS ---");
         System.out.printf("Total de sueldos actual: %.2f€\n", Plantilla.totalizarSueldos());

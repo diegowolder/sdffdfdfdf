@@ -112,9 +112,10 @@ public final class Plantilla {
     /**
      * Controla si se puede aplicar descuento a un empleado.
      * Verifica el número de descuentos aplicados previamente.
+     * Un empleado puede recibir descuentos si aún no ha sido descontado.
      * 
      * @param empleado Empleado a verificar
-     * @return true si se puede aplicar descuento, false en caso contrario
+     * @return true si no se ha aplicado ningún descuento aún, false en caso contrario
      */
     public static boolean controlDescontarPorcentaje(Empleado empleado) {
         if (empleado == null) return false;
