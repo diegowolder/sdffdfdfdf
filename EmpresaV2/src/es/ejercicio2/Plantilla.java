@@ -110,9 +110,9 @@ public final class Plantilla {
     }
     
     /**
-     * Controla si se puede aplicar descuento a un empleado.
-     * Verifica el número de descuentos aplicados previamente.
-     * Un empleado puede recibir descuentos si aún no ha sido descontado.
+     * Verifica si un empleado aún no ha recibido descuentos.
+     * Este método solo consulta el estado, no impide aplicar descuentos.
+     * El método descontarPorcentaje() puede aplicar múltiples descuentos sin verificar esta condición.
      * 
      * @param empleado Empleado a verificar
      * @return true si no se ha aplicado ningún descuento aún, false en caso contrario
